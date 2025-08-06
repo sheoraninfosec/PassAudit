@@ -22,7 +22,7 @@
 
 ## 🖥️ Live Demo
 
-> Coming soon... *(You can deploy using GitHub Pages or Netlify)*
+> Coming soon... 
 
 ---
 
@@ -66,6 +66,20 @@
 | 50–69       | 🟡 Good      |
 | 70–89       | 🟢 Strong    |
 | 90–100      | 💙 Very Strong |
+
+---
+
+## 📜 License
+
+MIT License  
+Feel free to use, modify, and share.
+
+---
+
+## 🙌 Credits
+
+Developed by **Jigesh Sheoran**  
+Inspired by the need for reliable, transparent password analysis tools in an offline-first world.
 
 ---
 
