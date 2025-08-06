@@ -17,13 +17,11 @@
   - Works in your browser — no servers, no tracking
 - ✅ **All-in-One HTML File**
   - No dependencies or installation required
-
+<!--  
 ---
+## 🖥️ Live Demo
 
- * ## 🖥️ Live Demo
-
-> Coming soon...  *
-
+> Coming soon... -->
 ---
 
 ## 📸 Screenshot
