@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>VaultPass - Password Generator & Strength Checker</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; background: #f9f9f9; }
+    .container { max-width: 600px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .strength-bar { height: 20px; border-radius: 5px; background: #eee; margin-top: 10px; }
+    .strength-fill { height: 100%; border-radius: 5px; transition: width 0.3s ease; }
+    label { display: block; margin: 10px 0 5px; }
+    input[type=checkbox] { margin-right: 5px; }
+    button { margin-top: 20px; padding: 10px 15px; border: none; background: #007bff; color: white; border-radius: 5px; cursor: pointer; }
+    input[type=range] { width: 100%; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>VaultPass Generator & Strength Checker</h2>
+
+  <label>Password Length: <span id="lengthDisplay">12</span></label>
+  <input type="range" id="length" min="6" max="24" value="12">
+
+  <label><input type="checkbox" id="uppercase" checked> Include Uppercase</label>
+  <label><input type="checkbox" id="lowercase" checked> Include Lowercase</label>
+  <label><input type="checkbox" id="numbers" checked> Include Numbers</label>
+  <label><input type="checkbox" id="symbols" checked> Include Symbols</label>
+
+  <button onclick="generatePassword()">Generate Password</button>
+  <p><strong>Password:</strong> <span id="password">(none)</span></p>
+
+  <div class="strength-bar">
+    <div id="strengthFill" class="strength-fill"></div>
+  </div>
+  <p><strong>Strength:</strong> <span id="strengthLabel">-</span></p>
+</div>
+
+<script>
+  const lengthSlider = document.getElementById('length');
+  const lengthDisplay = document.getElementById('lengthDisplay');
+  lengthSlider.oninput = () => lengthDisplay.textContent = lengthSlider.value;
+
+  function generatePassword() {
+    const length = parseInt(document.getElementById('length').value);
+    const useUpper = document.getElementById('uppercase').checked;
+    const useLower = document.getElementById('lowercase').checked;
+    const useNum = document.getElementById('numbers').checked;
+    const useSym = document.getElementById('symbols').checked;
+
+    let upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let lower = 'abcdefghijklmnopqrstuvwxyz';
+    let nums = '0123456789';
+    let syms = '!@#$%^&*()_+[]{}|;:,.<>?';
+    let all = '';
+
+    if (useUpper) all += upper;
+    if (useLower) all += lower;
+    if (useNum) all += nums;
+    if (useSym) all += syms;
+
+    if (all.length === 0) {
+      alert("Select at least one character type!");
+      return;
+    }
+
+    let password = '';
+    for (let i = 0; i < length; i++) {
+      password += all.charAt(Math.floor(Math.random() * all.length));
+    }
+
+    document.getElementById('password').textContent = password;
+    evaluatePassword(password);
+  }
+
+  function evaluatePassword(pwd) {
+    let score = 0;
+    const len = pwd.length;
+    if (len >= 8) score += 10;
+    if (len >= 12) score += 10;
+
+    if (/[A-Z]/.test(pwd)) score += 10;
+    if (/[a-z]/.test(pwd)) score += 10;
+    if (/[0-9]/.test(pwd)) score += 10;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 15;
+
+    if (/([A-Za-z0-9])\1{2,}/.test(pwd)) score -= 10; // repeated chars
+    if (/abc|123|password|qwerty|letmein/i.test(pwd)) score -= 20; // weak patterns
+
+    if (/([A-Z]{2,}|[a-z]{2,}|[0-9]{2,})/.test(pwd)) score -= 5;
+
+    if (score < 0) score = 0;
+    if (score > 100) score = 100;
+
+    const bar = document.getElementById('strengthFill');
+    const label = document.getElementById('strengthLabel');
+    bar.style.width = score + '%';
+
+    if (score < 30) {
+      bar.style.background = 'red';
+      label.textContent = 'Very Weak';
+    } else if (score < 50) {
+      bar.style.background = 'orange';
+      label.textContent = 'Weak';
+    } else if (score < 70) {
+      bar.style.background = 'gold';
+      label.textContent = 'Good';
+    } else if (score < 90) {
+      bar.style.background = 'green';
+      label.textContent = 'Strong';
+    } else {
+      bar.style.background = 'deepskyblue';
+      label.textContent = 'Very Strong';
+    }
+  }
+</script>
+</body>
+</html>
